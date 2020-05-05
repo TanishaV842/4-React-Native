@@ -29,24 +29,24 @@ class Favorites extends Component {
                     text: 'Delete',
                     type: 'delete',
                     onPress: () => {
-                      Alert.alert(
-                          'Delete Favorite?',
-                          'Are you sure you wish to delete the favorite campsite ' + item.name + '?',
-                          [
-                             {
-                                text: 'Cancel',
-                                onPress: () => console.log(item.name + 'Not Deleted'),
-                                style: 'cancel'
-                             },
-                              {
-                                  text: 'OK', 
-                                  onPress: () => this.props.deleteFavorite(item.id)
-                              }
-                          ],
-                          { cancelable: false}
-                      )  
+                        Alert.alert(
+                            'Delete Favorite?',
+                            'Are you sure you wish to delete the favorite campsite ' + item.name + '?',
+                            [
+                                {
+                                    text: 'Cancel',
+                                    onPress: () => console.log(item.name + 'Not Deleted'),
+                                    style: 'cancel'
+                                },
+                                {
+                                    text: 'OK',
+                                    onPress: () => this.props.deleteFavorite(item.id)
+                                }
+                            ],
+                            { cancelable: false }
+                        )
                     }
-            }
+                }
             ];
 
             return (
