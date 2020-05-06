@@ -10,11 +10,11 @@ const { persistor, store } = ConfigureStore();
 export default function App() {
   return (
     //  pass Provider store component as a prop
-    <Provider store={store}> 
+    <Provider store={store}>
       <PersistGate
-          loading={<Loading />}
-          persistor={persistor}>
-      <Main />
+        loading={<Loading />}
+        persistor={persistor}>
+        <Main />
       </PersistGate>
     </Provider>
   );
