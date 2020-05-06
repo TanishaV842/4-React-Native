@@ -4,6 +4,7 @@ import { Card, Icon, Rating, Input } from 'react-native-elements';
 import { connect } from 'react-redux';
 import { baseUrl } from '../shared/baseUrl';
 import { postFavorite, postComment } from '../redux/ActionCreators';
+import * as Animatable from 'react-native-animatable';
 
 const mapStateToProps = state => {
     return {
@@ -18,6 +19,48 @@ const mapDispatchToProps = {
     postComment: (campsiteId, rating, author, text) =>
         (postComment({ campsiteId, rating, author, text }))
 };
+
+
+
+function RenderCampsite(props) {
+
+    const { campsite } = props;
+
+    if (campsite) {
+        return (
+            <Animatable.View animation='fadeInDown' duration={2000} delay={1000}>
+                <Card
+                    featuredTitle={campsite.name}
+                    image={{ uri: baseUrl + campsite.image }}>
+                    <Text style={{ margin: 10 }}>
+                        {campsite.description}
+                    </Text>
+                    <View style={styles.cardRow}>
+                        <Icon
+                            name={props.favorite ? 'heart' : 'heart-o'}
+                            type='font-awesome'
+                            color='#f50'
+                            raised
+                            reverse
+                            onPress={() => props.favorite ?
+                                console.log('Already set as a favorite') : props.markFavorite()}
+                        />
+                        <Icon
+                            name='pencil'
+                            type='font-awesome'
+                            color='#5637DD'
+                            raised
+                            reverse
+                            onPress={() => props.onShowModal()}
+                            style={styles.cardItem}
+                        />
+                    </View>
+                </Card>
+            </Animatable.View>
+        );
+    }
+    return <View />;
+}
 
 function RenderComments({ comments }) {
     const renderCommentItem = ({ item }) => {
@@ -37,51 +80,16 @@ function RenderComments({ comments }) {
     };
 
     return (
-        <Card title='Comments'>
-            <FlatList
-                data={comments}
-                renderItem={renderCommentItem}
-                keyExtractor={item => item.id.toString()}
-            />
-        </Card>
-    );
-}
-
-function RenderCampsite(props) {
-
-    const { campsite } = props;
-    if (campsite) {
-        return (
-            <Card
-                featuredTitle={campsite.name}
-                image={{ uri: baseUrl + campsite.image }}>
-                <Text style={{ margin: 10 }}>
-                    {campsite.description}
-                </Text>
-                <View style={styles.cardRow}>
-                    <Icon
-                        name={props.favorite ? 'heart' : 'heart-o'}
-                        type='font-awesome'
-                        color='#f50'
-                        raised
-                        reverse
-                        onPress={() => props.favorite ?
-                            console.log('Already set as a favorite') : props.markFavorite()}
-                    />
-                    <Icon
-                        name='pencil'
-                        type='font-awesome'
-                        color='#5637DD'
-                        raised
-                        reverse
-                        onPress={() => props.onShowModal()}
-                        style={styles.cardItem}
-                    />
-                </View>
+        <Animatable.View animation='fadeInUp' duration={2000} delay={1000}>
+            <Card title='Comments'>
+                <FlatList
+                    data={comments}
+                    renderItem={renderCommentItem}
+                    keyExtractor={item => item.id.toString()}
+                />
             </Card>
-        );
-    }
-    return <View />;
+        </Animatable.View>
+    );
 }
 
 class CampsiteInfo extends Component {
@@ -128,7 +136,7 @@ class CampsiteInfo extends Component {
         const campsiteId = this.props.navigation.getParam('campsiteId');
         const campsite = this.props.campsites.campsites.filter(campsite => campsite.id === campsiteId)[0];
         const comments = this.props.comments.comments.filter(comments => comments.campsiteId === campsiteId);
-        
+
         return (
             <ScrollView>
                 <RenderCampsite campsite={campsite}
@@ -136,14 +144,14 @@ class CampsiteInfo extends Component {
                     markFavorite={() => this.markFavorite(campsiteId)}
                     onShowModal={() => this.toggleModal()}
                 />
-                
+
                 <RenderComments comments={comments} />
                 <Modal
                     animationType={'slide'}
                     transparent={false}
                     visible={this.state.showModal}
                     onRequestClose={() => this.toggleModal()}>
-                    
+
                     <View style={styles.modal}>
                         <Rating
                             showRating
@@ -166,7 +174,7 @@ class CampsiteInfo extends Component {
                             onChangeText={comment => this.setState({ text: comment })}
                             value={this.state.text}
                         />
-                        
+
                         <View style={{ margin: 10 }}>
                             <Button
                                 onPress={() => {
@@ -177,7 +185,7 @@ class CampsiteInfo extends Component {
                                 title='SUBMIT'
                             />
                         </View>
-                        
+
                         <View style={{ margin: 10 }}>
                             <Button
                                 onPress={() => {
