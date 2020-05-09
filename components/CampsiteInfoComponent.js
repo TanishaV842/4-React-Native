@@ -33,12 +33,13 @@ function RenderCampsite(props) {
     const view = React.createRef();
 
     const recognizeDrag = ({ dx }) => (dx < -200) ? true : false;
+    const recognizeComment = ({ dx }) => (dx > 200) ? true : false;
 
     const panResponder = PanResponder.create({
         onStartShouldSetPanResponder: () => true,
         onPanResponderGrant: () => {
             view.current.rubberBand(1000)
-            .then(endState => console.log(endState.finished ? 'finished' : 'canceled'));
+                .then(endState => console.log(endState.finished ? 'finished' : 'canceled'));
         },
         onPanResponderEnd: (e, gestureState) => {
             console.log('pan responder end', gestureState);
@@ -60,6 +61,8 @@ function RenderCampsite(props) {
                     ],
                     { cancelable: false }
                 );
+            } else if (recognizeComment(gestureState)) {
+                props.onShowModal();
             }
             return true;
         }
@@ -141,7 +144,7 @@ class CampsiteInfo extends Component {
         super(props);
         this.state = {
             showModal: false,
-            rating: '5',
+            rating: 5,
             author: '',
             text: ''
         }
@@ -170,7 +173,7 @@ class CampsiteInfo extends Component {
     resetForm() {
         this.setState({
             showModal: false,
-            rating: '5',
+            rating: 5,
             author: '',
             text: ''
         });
@@ -201,6 +204,7 @@ class CampsiteInfo extends Component {
                             showRating
                             startingValue={5}
                             imageSize={40}
+                            startingValue={this.state.rating}
                             onFinishRating={(rating) => this.setState({ rating: rating })}
                             style={{ paddingVertical: 10 }}
                         />
@@ -208,14 +212,14 @@ class CampsiteInfo extends Component {
                             placeholder='Author'
                             leftIcon={{ type: 'font-awesome', name: 'user-o' }}
                             leftIconContainerStyle={{ paddingRight: 10 }}
-                            onChangeText={author => this.setState({ author: author })}
+                            onChangeText={(author) => { this.setState({ author: author }) }}
                             value={this.state.author}
                         />
                         <Input
                             placeholder='Comment'
                             leftIcon={{ type: 'font-awesome', name: 'comment-o' }}
                             leftIconContainerStyle={{ paddingRight: 10 }}
-                            onChangeText={comment => this.setState({ text: comment })}
+                            onChangeText={(text) => { this.setState({ text: text }) }}
                             value={this.state.text}
                         />
 
