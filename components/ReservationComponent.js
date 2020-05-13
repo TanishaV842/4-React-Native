@@ -21,8 +21,6 @@ class Reservation extends Component {
         title: 'Reserve Campsite'
     }
 
-
-
     handleReservation() {
         console.log(JSON.stringify(this.state));
         const message = `Number of Campers: ${this.state.campers}
@@ -43,9 +41,9 @@ class Reservation extends Component {
                 },
                 {
                     text: 'OK',
-                    onPress: () => { 
+                    onPress: () => {
                         this.presentLocalNotification(this.state.date);
-                        this.resetForm() 
+                        this.resetForm()
                     }
                 }
             ],
@@ -80,7 +78,7 @@ class Reservation extends Component {
         if (permission.status === 'granted') {
             Notifications.presentLocalNotificationAsync({
                 title: 'Your Campsite Reservation Search',
-                body: 'Search for  ' + date +  ' requested'
+                body: 'Search for  ' + date + ' requested'
             });
         }
     }
